@@ -114,7 +114,6 @@
                         <div class="sidebar-profile-info">
                             <a href="javascript:void(0);" class="account-settings-link">
                                 <p>Usuario <?php echo $usuario[0]->nombre_usuario ?></p>
-                                <label id="id_usuario" class="hidden"><?php echo $usuario[0]->id_usuario ?></label>
                                 <span><?php echo $usuario[0]->email_usuario ?><i class="material-icons right">arrow_drop_down</i></span>
                             </a>
                         </div>
@@ -145,61 +144,37 @@
                 </div>
             </aside>
             <main class="mn-inner">
-
-                <div class="row">
-                    <div class="card-panel">
-                        <h4 class="center-align">Modulo Herbario</h4>
-                        </br>
-                        <table class="bordered">
-                            <thead>
-                                <tr>
-                                    <td class="Hidden">ID</td>
-                                    <td>Nombre</td>
-                                    <td>Descripcion</td>
-                                    <td>Accion</td>
-                                </tr>
-                            </thead>
-                            <tbody id="plantillas1">
-
-                            </tbody>
-                        </table>
-                    </div>
+                <span>Iluminacion</span>
+                <div class="switch">
+                    <label>
+                        Off
+                        <input ng-click="isSwitchedOn = !isSwitchedOn" ng_checked="isSwitchedOn" id="iluminacion_sw" type="checkbox">
+                        <span class="lever"></span>
+                        On
+                    </label>
+                </div>
+                <br>
+                <span>Bomba de agua</span>
+                <div class="switch">
+                    <label>
+                        Off
+                        <input id="agua_sw" type="checkbox">
+                        <span class="lever"></span>
+                        On
+                    </label>
+                </div>
+                <br>
+                <span>Ventilacion</span>
+                <div class="switch">
+                    <label>
+                        Off
+                        <input id="ventilacion_sw" type="checkbox">
+                        <span class="lever"></span>
+                        On
+                    </label>
                 </div>
 
-                <div id="modal1" class="modal">
-                    <div class="modal-content">
-                        <h4 class="center-align"><label id="nombre_cultivo"></label></h4>
-                        <div class="row">
-                            <form id="form_registrar" class="col s12" method="post">
 
-                                <div class="card-panel">
-                                    <h4 class="center-align">Modulo Herbario</h4>
-                                    </br>
-                                    <table class="bordered">
-                                        <thead>
-                                            <tr>
-                                                <td>Nombre</td>
-                                                <td>Descripcion</td>
-                                                <td>Duracion etapa vegetativa</td>
-                                                <td>Temperatura vegetativa</td>
-                                                <td>Humedad vegetativa</td>
-                                                <td>Duracion etapa flora</td>
-                                                <td>Temperatura flora</td>
-                                                <td>Humedad flora</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="plantillas2">
-
-                                        </tbody>
-                                    </table>
-                                    <div class="col s12">
-                                        <button class="btn" id="cerrar_modal" name="cerrar_modal">Cerrar</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
 
 
             </main>
@@ -224,94 +199,40 @@
 
             <script>
 
-            $(".modal-trigger").leanModal();
-            $("select").material_select();
+                            var switchStatus = false;
+                            $("#iluminacion_sw").on('change', function () {
+                                if ($(this).is(':checked')) {
+                                    switchStatus = $(this).is(':checked');
+                                     Materialize.toast("Luz Encendida", "10000");
+                                } else {
+                                    switchStatus = $(this).is(':checked');
+                                    Materialize.toast("Luz apagada", "10000");
+                                }
+                            });
 
-            plantillaslistado1();
+//                         var switchStatus = false;
+                            $("#agua_sw").on('change', function () {
+                                if ($(this).is(':checked')) {
+                                    switchStatus = $(this).is(':checked');
+                                     Materialize.toast("Bomba de agua Encendida", "10000");
+                                } else {
+                                    switchStatus = $(this).is(':checked');
+                                    Materialize.toast("Bomba de agua apagada", "10000");
+                                }
+                            });
+                            
+                            var switchStatus = false;
+                            $("#ventilacion_sw").on('change', function () {
+                                if ($(this).is(':checked')) {
+                                    switchStatus = $(this).is(':checked');
+                                     Materialize.toast("Ventilacion Encendida", "10000");
+                                } else {
+                                    switchStatus = $(this).is(':checked');
+                                    Materialize.toast("Ventilacion apagada", "10000");
+                                }
+                            });
 
-            function plantillaslistado1() {
-                $("#plantillas1").empty();
-                var url = base_url + 'listadoPlantillas';
-                $.getJSON(url, function (result) {
-                    $.each(result, function (i, o) {
-                        var fila = "<tr>";
-                        fila += "<td class='Hidden'>" + o.id_cultivo + "</td>";
-                        fila += "<td>" + o.nombre_cultivo + "</td>";
-                        fila += "<td>" + o.descripcion_cultivo + "</td>";
-                        fila += "<td> <a id='load_modal' class='btn-floating'><i class='material-icons'>search</i></a> </td>";
-                        fila += "<td> <a id='bt_elegir_plantilla' class='btn-floating'><i class='material-icons'>done_outline</i></a> </td>";
-                        fila += "</tr>";
-                        $("#plantillas1").append(fila);
-                    });
-                });
-            }
 
-//Cargar modal con informacion completa
-
-            $("body").on("click", "#load_modal", function () {
-
-                $("#modal1").openModal();
-
-                $("#plantillas2").empty();
-                var id_cultivo = $(this).parent().parent().children()[0];
-                id_cultivo = $(id_cultivo).text();
-
-                $.ajax({
-                    url: base_url + 'usuario/buscar_plantilla',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {id_cultivo: id_cultivo},
-                    success: function (o) {
-                        $.each(o, function (i, o) {
-                            var fila = "<tr>";
-                            fila += "<td>" + o.nombre_cultivo + "</td>";
-                            fila += "<td>" + o.descripcion_cultivo + "</td>";
-                            fila += "<td>" + o.duracion_veg_cultivo + "</td>";
-                            fila += "<td>" + o.temp_veg_cultivo + "</td>";
-                            fila += "<td>" + o.hum_veg_cultivo + "</td>";
-                            fila += "<td>" + o.duracion_flora_cultivo + "</td>";
-                            fila += "<td>" + o.temp_flora_cultivo + "</td>";
-                            fila += "<td>" + o.hum_flora_cultivo + "</td>";
-                            fila += "</tr>";
-                            $("#plantillas2").append(fila);
-                        });
-                    },
-                    error: function () {
-                        Materialize.toast("ERROR 500 JSON", "10000");
-                    }
-                });
-
-            });
-
-            $("body").on("click", "#bt_elegir_plantilla", function () {
-
-                var id_plantilla = $(this).parent().parent().children()[0];
-                id_plantilla = $(id_cultivo).text();
-                var id_usuario = $("#id_usuario").val();
-
-                $.ajax({
-                    url: base_url + 'elegirPlantilla',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {id_plantilla: id_plantilla, id_usuario: id_usuario},
-                    success: function (o) {
-                        Materialize.toast(o.mensaje, "10000");
-                        
-                        window.location.href = base_url + 'usuario/moduloMediciones';
-                        
-                    },
-                    error: function () {
-                        Materialize.toast("ERROR 500 JSON", "10000");
-                    }
-                });
-
-            });
-
-            $("#cerrar_modal").click(function (e) {
-
-                $("#modal1").closeModal();
-
-            });
 
             </script>
 

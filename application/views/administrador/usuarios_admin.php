@@ -105,7 +105,7 @@
                 <div class="side-nav-wrapper green lighten-5">
                     <div class="sidebar-profile center-align">
                         <div class="sidebar-profile-image">
-                            <img src="<?php echo base_url();?>assets/images/profile-image.png" class="circle" alt="">
+                            <img src="<?php echo base_url(); ?>assets/images/profile-image.png" class="circle" alt="">
                         </div>
                         <div class="sidebar-profile-info">
                             <a href="javascript:void(0);" class="account-settings-link">
@@ -150,7 +150,7 @@
                                 <i class="material-icons">add</i>
                             </a>
                             </br>
-                            <table class="bordered">
+                            <table id="tblUsuarios" class="bordered">
                                 <thead>
                                     <tr>
                                         <td>ID</td>
@@ -163,7 +163,7 @@
                                         <td>Accion</td>
                                     </tr>
                                 </thead>
-                                <tbody id="usuarios">
+                                <tbody>
 
                                 </tbody>
                             </table>
@@ -221,6 +221,8 @@
             </main>
             <!-- Javascripts -->
             <script src="<?php echo base_url(); ?>assets/plugins/jquery/jquery-2.2.0.min.js"></script>
+            <script src="<?php echo base_url(); ?>assets/plugins/dataTables/js/jquery.dataTables.js"></script>
+            <script src="<?php echo base_url(); ?>assets/plugins/dataTables/js/jquery.dataTables.min.js"></script>
             <script src="<?php echo base_url(); ?>assets/plugins/materialize/js/materialize.min.js"></script>
             <script src="<?php echo base_url(); ?>assets/plugins/material-preloader/js/materialPreloader.min.js"></script>
             <script src="<?php echo base_url(); ?>assets/plugins/jquery-blockui/jquery.blockui.js"></script>
@@ -244,29 +246,68 @@
 
             $(".modal-trigger").leanModal();
             $("select").material_select();
+//
+//            usuarioslistado();
+//
+//            function usuarioslistado() {
+//                $("#usuarios").empty();
+//                var url = base_url + 'listadoUsuarios';
+//                $.getJSON(url, function (result) {
+//                    $.each(result, function (i, o) {
+//                        var fila = "<tr>";
+//                        fila += "<td>" + o.id_usuario + "</td>";
+//                        fila += "<td>" + o.nombre_usuario + "</td>";
+//                        fila += "<td>" + o.apellido_usuario + "</td>";
+//                        fila += "<td>" + o.email_usuario + "</td>";
+//                        fila += "<td>" + o.user_usuario + "</td>";
+//                        fila += "<td>" + o.password_usuario + "</td>";
+//                        fila += "<td>" + ((o.validacion_usuario === "1") ? "Validado" : "No validado") + "</td>";
+//                        fila += "<td> <a id='load_modal' class='btn-floating'><i class='material-icons'>edit</i></a> </td>";
+//                        fila += "</tr>";
+//                        $("#usuarios").append(fila);
+//                    });
+//                });
+//            }
 
-            usuarioslistado();
+            $('#tblUsuarios').DataTable({
 
-            function usuarioslistado() {
-                $("#usuarios").empty();
-                var url = base_url + 'listadoUsuarios';
-                $.getJSON(url, function (result) {
-                    $.each(result, function (i, o) {
-                        var fila = "<tr>";
-                        fila += "<td>" + o.id_usuario + "</td>";
-                        fila += "<td>" + o.nombre_usuario + "</td>";
-                        fila += "<td>" + o.apellido_usuario + "</td>";
-                        fila += "<td>" + o.email_usuario + "</td>";
-                        fila += "<td>" + o.user_usuario + "</td>";
-                        fila += "<td>" + o.password_usuario + "</td>";
-                        fila += "<td>" + ((o.validacion_usuario === "1") ? "Validado" : "No validado") + "</td>";
-                        fila += "<td> <a id='load_modal' class='btn-floating'><i class='material-icons'>edit</i></a> </td>";
-                        fila += "</tr>";
-                        $("#usuarios").append(fila);
-                    });
-                });
-            }
+                'paging': false,
+                'info': false,
+                'filter': true,
+                'stateSave': true,
+                'ajax': {
+                    "url": base_url + 'listadoUsuarios',
+                    "type": "POST",
+                    dataSrc: ''
 
+                },
+                'columns': [
+                    {data: 'id_usuario'},
+                    {data: 'nombre_usuario'},
+                    {data: 'apellido_usuario'},
+                    {data: 'email_usuario'},
+                    {data: 'user_usuario'},
+                    {data: 'password_usuario'},
+                    {data: 'validacion_usuario'},
+                    {"orderable": true,
+                        render: function (data, type, row) {
+                            return '<a id="load_modal" class="btn-floating"><i class="material-icons">edit</i></a>';
+                        }
+                    }
+                ],
+                "columnDefs": [{
+                        "target": [6],
+                        "data": "validacion_usuario",
+                        "render": function (data, type, row) {
+                            if (data === 0) {
+                                return "<span class=''>No validado</span>";
+                            } else {
+                                return "<span class=''>Validado</span>";
+                            }
+                        }
+                    }],
+                "order": [[0, "asc"]]
+            });
             //Cargar modal para editar y eliminar
 
             $("body").on("click", "#load_modal", function () {
@@ -284,23 +325,18 @@
                 $("#email_usuario_e").val($(email_usuario).text());
                 $("#user_usuario_e").val($(user_usuario).text());
                 $("#password_usuario_e").val($(password_usuario).text());
-
                 $("#modal2").openModal();
-
             });
-
             //Boton insertar
 
             $("#bt_insertar_usuario").on("click", function (e) {
                 e.preventDefault();
-
                 var nombre_usuario = $("#nombre_usuario").val();
                 var apellido_usuario = $("#apellido_usuario").val();
                 var email_usuario = $("#email_usuario").val();
                 var user_usuario = $("#user_usuario").val();
                 var password_usuario = $("#password_usuario").val();
                 var validacion_usuario = $("#validacion_usuario").val();
-
                 $.ajax({
                     url: base_url + 'insertarUsuario',
                     type: 'POST',
@@ -310,17 +346,14 @@
                         validacion_usuario: validacion_usuario},
                     success: function (o) {
                         Materialize.toast(o.mensaje, "10000");
-                        usuarioslistado();
                         $("#modal1").closeModal();
+                        location.reload();
                     },
                     error: function () {
                         Materialize.toast("ERROR 500 JSON", "10000");
                     }
                 });
-
-
             });
-
             //Boton editar
 
             $("#bt_editar_usuario").on("click", function (e) {
@@ -331,7 +364,6 @@
                 var email_usuario = $("#email_usuario_e").val();
                 var user_usuario = $("#user_usuario_e").val();
                 var validacion_usuario = $("#validacion_usuario_e").val();
-
                 $.ajax({
                     url: base_url + 'editarUsuario',
                     type: 'POST',
@@ -340,23 +372,19 @@
                         email_usuario: email_usuario, user_usuario: user_usuario, validacion_usuario: validacion_usuario},
                     success: function (o) {
                         Materialize.toast(o.mensaje, "10000");
-                        usuarioslistado();
                         $("#modal2").closeModal();
+                        location.reload();
                     },
                     error: function () {
                         Materialize.toast("ERROR 500 JSON", "10000");
                     }
                 });
-
-
             });
-            
             //Boton eliminar
-            
+
             $("#bt_eliminar_usuario").on("click", function (e) {
                 e.preventDefault();
                 var id_usuario = $("#id_usuario_e").val();
-
                 $.ajax({
                     url: base_url + 'eliminarUsuario',
                     type: 'POST',
@@ -364,15 +392,13 @@
                     data: {id_usuario: id_usuario},
                     success: function (o) {
                         Materialize.toast(o.mensaje, "10000");
-                        usuarioslistado();
                         $("#modal2").closeModal();
+                        location.reload();
                     },
                     error: function () {
                         Materialize.toast("ERROR 500 JSON", "10000");
                     }
                 });
-
-
             });
 
             </script>

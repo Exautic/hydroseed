@@ -1,24 +1,16 @@
 <?php
+
+$email_to = "hydroseed2019@gmail.com";
 $nombre = $_POST['nombre'];
-$mail = $_POST['email'];
+$email_from = $_POST['email'];
 $asunto = $_POST['asunto'];
 $mensaje = $_POST['mensaje'];
 
-echo $nombre. " email: ".$mail."</br>"." Envia el siguiente mensaje: </br>".$mensaje; 
+$contenido = "Autor del mensaje: " . $nombre . "\nE-mail: " .$email_from . "\nMensaje: ". $mensaje .".";
 
-//$mensaje = "Este mensaje fue enviado por " . $nombre . ",\r\n";
-//$mensaje .= "Su e-mail es: " . $mail . " \r\n";
-//$mensaje .= "Mensaje: " . $_POST['contactMessage'] . " \r\n";
-//$mensaje .= "Enviado el " . date('d/m/Y', time());
+mail($email_to, $asunto, $contenido);
 
-$para = 'leorodriguez246@gmail.com';
+header("Location: http://localhost/ProyectoHydroseed");
 
-if (mail($para, $asunto, $mensaje)) {
-    echo "E-mail enviado";
-}else{
-    echo "E-mail no enviado";
-}
-
-//header("Location:index.html");
-
+Materialize.toast("Mensaje enviado.", "10000");
 ?>

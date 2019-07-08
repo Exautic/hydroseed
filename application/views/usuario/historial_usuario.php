@@ -147,9 +147,17 @@
             <main class="mn-inner">
 
                 <div class="row">
-                    <div class="card-panel">
+                    <div class="card-panel col s12">
                         <h4 class="center-align">Historial de mediciones</h4>
                         </br>
+                        <div class="col s4"></div>
+                        <div class="center-align col s3">
+                            <input type="text" name="buscar_fecha" id="buscar_fecha" class="form-control pull-right" placeholder="Buscar por fecha">
+                        </div>
+                        <div class="col s1">
+                            <button type="submit" id="bt_buscar" name="bt_buscar" class="btn btn-default"><i class="material-icons center-align">search</i></button>
+                        </div>
+                        <div class="col s4"></div>
                         <table class="bordered">
                             <thead>
                                 <tr>

@@ -59,7 +59,7 @@
                         <li class="current"><a class=""  href="<?php echo base_url(); ?>home" title="home">Home</a></li>
                         <li><a class=""  href="<?php echo base_url(); ?>registro" title="registro">Registrarse</a></li>
                         <li><a class=""  href="<?php echo base_url(); ?>sesion" title="services">Iniciar sesion</a></li>
-                        <li><a class=""  href="<?php echo base_url(); ?>contacto" title="contact">Contacto</a></li>
+                        <li><a class=""  href="#contact" title="contact">Contacto</a></li>
                         <li><a class=""  href="<?php echo base_url(); ?>sesionAdmin" title="clients">Administracion</a></li>
                     </ul>
 
@@ -98,7 +98,7 @@
                         <a href="<?php echo base_url(); ?>registro" class=" btn btn--stroke">
                             Unete
                         </a>
-                        <a href="<?php echo base_url(); ?>contacto" class=" btn btn--stroke">
+                        <a href="#contact" class=" btn btn--stroke">
                             Contactanos
                         </a>
                     </div>
@@ -216,6 +216,56 @@
 
         </section> <!-- end s-services -->
 
+        <!-- contact
+        ================================================== -->
+        <section id="contact" class="s-contact">
+
+            <div class="overlay"></div>
+            <div class="contact__line"></div>
+
+            <div class="row section-header" data-aos="fade-up">
+                <div class="col-full">
+                    <h3 class="subhead">Contacta con nosotros</h3>
+                    <h1 class="display-2 display-2--light">Si tienes dudas, tan solo pregunta.</h1>
+                </div>
+            </div>
+
+            <div class="row contact-content" data-aos="fade-up">
+
+                <div class="contact-primary">
+
+                    <h3 class="h6">Envianos un comentario</h3>
+
+                    <form method="post" action="<?php echo base_url(); ?>assets/enviar2.php" novalidate="novalidate">
+                        <fieldset>
+
+                            <div class="form-field">
+                                <input name="nombre" type="text" id="nombre" placeholder="Tu Nombre" value="" minlength="2" required="" aria-required="true" class="full-width">
+                            </div>
+                            <div class="form-field">
+                                <input name="email" type="email" id="email" placeholder="Tu E-mail" value="" required="" aria-required="true" class="full-width">
+                            </div>
+                            <div class="form-field">
+                                <input name="asunto" type="text" id="asunto" placeholder="Asunto" value="" class="full-width">
+                            </div>
+                            <div class="form-field">
+                                <textarea name="mensaje" id="mensaje" placeholder="Tu Mensaje o Comentario" rows="10" cols="50" required="" aria-required="true" class="full-width"></textarea>
+                            </div>
+                            <div class="form-field">
+                                <button class="full-width btn--primary">Enviar</button>
+                            </div>
+                        </fieldset>
+                    </form>
+
+                </div> <!-- end contact-primary -->
+
+               
+
+            </div> <!-- end contact-content -->
+
+        </section> <!-- end s-contact -->
+
+
 
         <!-- footer
         ================================================== -->
@@ -250,7 +300,7 @@
 
         <!-- preloader
         ================================================== -->
-        <div id="preloader">
+<!--        <div id="preloader">
             <div id="loader">
                 <div class="line-scale-pulse-out">
                     <div></div>
@@ -260,15 +310,16 @@
                     <div></div>
                 </div>
             </div>
-        </div>
-
+        </div>-->
 
         <!-- Java Script
         ================================================== -->
         <script src="<?php echo base_url(); ?>assets/js/jquery-3.2.1.min.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/plugins.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/main.js"></script>
-
+        <script>
+     
+        </script>
     </body>
 
 </html>

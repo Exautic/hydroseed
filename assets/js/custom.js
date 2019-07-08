@@ -15,20 +15,19 @@ $(document).ready(function () {
             data: {user_usuario: user_usuario, password_usuario: password_usuario},
             success: function (o) {
                 if (o.mensaje === "0") {
-
                     Materialize.toast("Usuario no encontrado.", "10000");
                 } else {
-
                     if (o.mensaje === "validar") {
                         Materialize.toast("Usuario no validado, contacte con un administrador.", "10000");
+                    } else if (o.mensaje === "informacion") {
+                        Materialize.toast("Falta informacion, escriban usuario y contraseña.", "10000");
                     } else {
-
                         window.location.href = base_url + o.mensaje;
                     }
                 }
             },
             error: function () {
-                Materialize.toast("ERROR 500 JSON", "10000");
+                Materialize.toast("Falta informacion, escriban usuario y contraseña.", "10000");
             }
         });
 
@@ -49,12 +48,14 @@ $(document).ready(function () {
             success: function (o) {
                 if (o.mensaje === "0") {
                     Materialize.toast("Administrador no encontrado, verifique la informacion.", "10000");
+                } else if (o.mensaje === "informacion") {
+                    Materialize.toast("Falta informacion, escriban usuario y contraseña.", "10000");
                 } else {
                     window.location.href = base_url + o.mensaje;
                 }
             },
             error: function () {
-                Materialize.toast("ERROR 500 JSON", "10000");
+                Materialize.toast("Falta informacion, escriban usuario y contraseña.", "10000");
             }
         });
 
@@ -91,7 +92,7 @@ $(document).ready(function () {
         });
 
     });
-    
+
 //     $("#bt_insertar_usuario").click(function (e) {
 //         
 //        e.preventDefault();

@@ -45,6 +45,11 @@ class Welcome extends CI_Controller {
     public function inicio_sesion() {
         $user_usuario = $this->input->POST('user_usuario');
         $password_usuario = $this->input->POST('password_usuario');
+        
+        if ($user_usuario == "" || $password_usuario == "" ) {
+            echo json_encode(array("mensaje" => "informacion"));
+        }
+
         $arrayUser = $this->sesion_model->login($user_usuario, md5($password_usuario));
         if (count($arrayUser) > 0) {
             if ($arrayUser[0]->validacion_usuario == 0) {
@@ -61,6 +66,12 @@ class Welcome extends CI_Controller {
     public function inicio_sesionAdmin() {
         $user_admin = $this->input->POST('user_admin');
         $contraseña_admin = $this->input->POST('contraseña_admin');
+        
+        if ($user_admin == "" || $contraseña_admin == "" ) {
+            echo json_encode(array("mensaje" => "informacion"));
+        }
+        
+        
         $arrayUser = $this->sesion_model->loginAdmin($user_admin, md5($contraseña_admin));
         if ($this->sesion_model->loginAdmin($user_admin, md5($contraseña_admin))) {
             $this->session->set_userdata("administrador", $arrayUser);

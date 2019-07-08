@@ -147,7 +147,7 @@
                             <i class="material-icons">add</i>
                         </a>
                         </br>
-                        <table class="bordered">
+                        <table id="tblPlantillas" class="bordered">
                             <thead>
                                 <tr>
                                     <td>ID</td>
@@ -163,7 +163,7 @@
                                     <td>Accion</td>
                                 </tr>
                             </thead>
-                            <tbody id="plantillas">
+                            <tbody>
 
                             </tbody>
                         </table>
@@ -244,6 +244,8 @@
             </main>
             <!-- Javascripts -->
             <script src="<?php echo base_url(); ?>assets/plugins/jquery/jquery-2.2.0.min.js"></script>
+            <script src="<?php echo base_url(); ?>assets/plugins/dataTables/js/jquery.dataTables.js"></script>
+            <script src="<?php echo base_url(); ?>assets/plugins/dataTables/js/jquery.dataTables.min.js"></script>
             <script src="<?php echo base_url(); ?>assets/plugins/materialize/js/materialize.min.js"></script>
             <script src="<?php echo base_url(); ?>assets/plugins/material-preloader/js/materialPreloader.min.js"></script>
             <script src="<?php echo base_url(); ?>assets/plugins/jquery-blockui/jquery.blockui.js"></script>
@@ -268,31 +270,62 @@
             $(".modal-trigger").leanModal();
             $("select").material_select();
 
-            plantillaslistado();
-
-            function plantillaslistado() {
-                $("#plantillas").empty();
-                var url = base_url + 'listadoPlantillas';
-                $.getJSON(url, function (result) {
-                    $.each(result, function (i, o) {
-                        var fila = "<tr>";
-                        fila += "<td>" + o.id_cultivo + "</td>";
+//            plantillaslistado();
+//
+//            function plantillaslistado() {
+//                $("#plantillas").empty();
+//                var url = base_url + 'listadoPlantillas';
+//                $.getJSON(url, function (result) {
+//                    $.each(result, function (i, o) {
+//                        var fila = "<tr>";
+//                        fila += "<td>" + o.id_cultivo + "</td>";
 //                        fila += "<td>" + o.img_cultivo +"</td>";
-                        fila += "<td>" + o.nombre_cultivo + "</td>";
-                        fila += "<td>" + o.descripcion_cultivo + "</td>";
-                        fila += "<td>" + o.duracion_veg_cultivo + "</td>";
-                        fila += "<td>" + o.temp_veg_cultivo + "</td>";
-                        fila += "<td>" + o.hum_veg_cultivo + "</td>";
-                        fila += "<td>" + o.duracion_flora_cultivo + "</td>";
-                        fila += "<td>" + o.temp_flora_cultivo + "</td>";
-                        fila += "<td>" + o.hum_flora_cultivo + "</td>";
-                        fila += "<td> <a id='load_modal' class='btn-floating'><i class='material-icons'>edit</i></a> </td>";
-                        fila += "</tr>";
-                        $("#plantillas").append(fila);
-                    });
-                });
-            }
-            ;
+//                        fila += "<td>" + o.nombre_cultivo + "</td>";
+//                        fila += "<td>" + o.descripcion_cultivo + "</td>";
+//                        fila += "<td>" + o.duracion_veg_cultivo + "</td>";
+//                        fila += "<td>" + o.temp_veg_cultivo + "</td>";
+//                        fila += "<td>" + o.hum_veg_cultivo + "</td>";
+//                        fila += "<td>" + o.duracion_flora_cultivo + "</td>";
+//                        fila += "<td>" + o.temp_flora_cultivo + "</td>";
+//                        fila += "<td>" + o.hum_flora_cultivo + "</td>";
+//                        fila += "<td> <a id='load_modal' class='btn-floating'><i class='material-icons'>edit</i></a> </td>";
+//                        fila += "</tr>";
+//                        $("#plantillas").append(fila);
+//                    });
+//                });
+//            }
+
+            $('#tblPlantillas').DataTable({
+
+                'paging': false,
+                'info': false,
+                'filter': true,
+                'stateSave': true,
+                'ajax': {
+                    "url": base_url + 'listadoPlantillas',
+                    "type": "POST",
+                    dataSrc: ''
+
+                },
+                'columns': [
+                    {data: 'id_cultivo'},
+                    {data: 'nombre_cultivo'},
+                    {data: 'descripcion_cultivo'},
+                    {data: 'duracion_veg_cultivo'},
+                    {data: 'temp_veg_cultivo'},
+                    {data: 'hum_veg_cultivo'},
+                    {data: 'duracion_flora_cultivo'},
+                    {data: 'temp_flora_cultivo'},
+                    {data: 'hum_flora_cultivo'},
+                    {"orderable": true,
+                        render: function (data, type, row) {
+                            return '<a id="load_modal" class="btn-floating"><i class="material-icons">edit</i></a>';
+                        }
+                    }
+                ],
+                "order": [[0, "asc"]]
+            });
+
 
 //Cargar modal para editar y eliminar
 
@@ -341,8 +374,8 @@
                     timeout: 600000,
                     success: function (o) {
                         Materialize.toast(o.mensaje, "10000");
-                        plantillaslistado();
                         $("#modal1").closeModal();
+                        location.reload();
                     },
                     error: function () {
                         Materialize.toast("ERROR 500 JSON", "10000");
@@ -375,8 +408,8 @@
                         duracion_flora_cultivo: duracion_flora_cultivo, temp_flora_cultivo: temp_flora_cultivo, hum_flora_cultivo: hum_flora_cultivo},
                     success: function (o) {
                         Materialize.toast(o.mensaje, "10000");
-                        plantillaslistado();
                         $("#modal2").closeModal();
+                        location.reload();
                     },
                     error: function () {
                         Materialize.toast("ERROR 500 JSON", "10000");
@@ -399,8 +432,8 @@
                     data: {id_cultivo: id_cultivo},
                     success: function (o) {
                         Materialize.toast(o.mensaje, "10000");
-                        plantillaslistado();
                         $("#modal2").closeModal();
+                        location.reload();
                     },
                     error: function () {
                         Materialize.toast("ERROR 500 JSON", "10000");

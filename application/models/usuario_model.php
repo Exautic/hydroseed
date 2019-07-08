@@ -38,7 +38,7 @@ class usuario_model extends CI_Model {
     public function eliminar_historial($id_historial) {
 
         $this->db->where("id_historial", $id_historial);
-        return $this->db->delete("historial");
+        return $this->db->delete("historial_mediciones");
         
     }
 
